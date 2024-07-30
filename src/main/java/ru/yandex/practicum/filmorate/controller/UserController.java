@@ -25,7 +25,7 @@ public class UserController {
     }
 
     private void setNameSameAsLogin(User user) {
-        if(user.getName() == null || user.getName().isBlank()) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
     }
@@ -54,7 +54,7 @@ public class UserController {
     public User update(@RequestBody @Valid User user) {
         log.info("Update user {} start", user);
         User savedUser = users.get(user.getId());
-        if(savedUser == null) {
+        if (savedUser == null) {
             throw new NotFoundException("Пользователь с id = " + user.getId() + " не найден");
         }
 

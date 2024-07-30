@@ -25,7 +25,7 @@ public class UserControllerTest {
     @BeforeEach
     void initialize() {
         userController = new UserController();
-        try(ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             validator = factory.getValidator();
         }
     }
@@ -37,7 +37,7 @@ public class UserControllerTest {
 
         user.setName("Иван иванов");
         user.setLogin("IvanovI");
-        user.setBirthday(LocalDate.of(1983,11,11));
+        user.setBirthday(LocalDate.of(1983, 11, 11));
         user.setEmail("ivanov_i@yandex.ru");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Marker.OnCreate.class);
@@ -48,7 +48,7 @@ public class UserControllerTest {
         violations = validator.validate(user, Marker.OnUpdate.class);
         assertTrue(violations.isEmpty(), "Не обновлён пользователь с корректно заданными параметрами");
 
-        assertDoesNotThrow(()->{
+        assertDoesNotThrow(() -> {
             userController.create(user);
         }, "Не создан пользователь с корректно заданными параметрами");
     }
@@ -60,14 +60,14 @@ public class UserControllerTest {
 
         user1.setName("Иван Иванов");
         user1.setLogin("IvanovI");
-        user1.setBirthday(LocalDate.of(1983,11,11));
+        user1.setBirthday(LocalDate.of(1983, 11, 11));
         user1.setEmail("ivanov_i@yandex.ru");
 
         User user2 = new User();
 
         user2.setName("Пётр Петров");
         user2.setLogin("PiterFirst");
-        user2.setBirthday(LocalDate.of(1999,12,12));
+        user2.setBirthday(LocalDate.of(1999, 12, 12));
         user2.setEmail("piter1@yandex.ru");
 
         User createdUser1 = userController.create(user1);
@@ -87,16 +87,16 @@ public class UserControllerTest {
 
         user.setName("Иван иванов");
         user.setLogin("IvanovI");
-        user.setBirthday(LocalDate.of(1983,11,11));
+        user.setBirthday(LocalDate.of(1983, 11, 11));
         user.setEmail("ivanov_i@yandex.ru");
 
         user = userController.create(user);
 
         user.setEmail("ivanov_work@yandex.ru");
-        user.setBirthday(LocalDate.of(1983,11,1));
+        user.setBirthday(LocalDate.of(1983, 11, 1));
 
         User userFinal = user;
-        assertDoesNotThrow(()->{
+        assertDoesNotThrow(() -> {
             userController.update(userFinal);
         }, "Не обновлён пользователь с корректно заданными параметрами");
     }
@@ -109,11 +109,11 @@ public class UserControllerTest {
         user.setId(88);
         user.setName("Иван иванов");
         user.setLogin("IvanovI");
-        user.setBirthday(LocalDate.of(1983,11,11));
+        user.setBirthday(LocalDate.of(1983, 11, 11));
         user.setEmail("ivanov_i@yandex.ru");
 
         assertThrows(NotFoundException.class,
-                ()-> userController.update(user),
+                () -> userController.update(user),
                 "Был обновлён пользователь с несуществующим id");
     }
 
@@ -124,14 +124,14 @@ public class UserControllerTest {
 
         user1.setName("Иван Иванов");
         user1.setLogin("IvanovI");
-        user1.setBirthday(LocalDate.of(1983,11,11));
+        user1.setBirthday(LocalDate.of(1983, 11, 11));
         user1.setEmail("");
 
         User user2 = new User();
 
         user2.setName("Пётр Петров");
         user2.setLogin("PiterFirst");
-        user2.setBirthday(LocalDate.of(1999,12,12));
+        user2.setBirthday(LocalDate.of(1999, 12, 12));
         user2.setEmail("piter1");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user1, Marker.OnCreate.class);
@@ -158,7 +158,7 @@ public class UserControllerTest {
 
         user.setName("");
         user.setLogin("IvanovI");
-        user.setBirthday(LocalDate.of(1983,11,11));
+        user.setBirthday(LocalDate.of(1983, 11, 11));
         user.setEmail("ivanov_i@yandex.ru");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Marker.OnCreate.class);
@@ -182,7 +182,7 @@ public class UserControllerTest {
 
         user.setName("Иван иванов");
         user.setLogin("");
-        user.setBirthday(LocalDate.of(1983,11,11));
+        user.setBirthday(LocalDate.of(1983, 11, 11));
         user.setEmail("ivanov_i@yandex.ru");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Marker.OnCreate.class);
@@ -199,7 +199,7 @@ public class UserControllerTest {
 
         user.setName("Иван иванов");
         user.setLogin("IvanovI");
-        user.setBirthday(LocalDate.of(2983,11,11));
+        user.setBirthday(LocalDate.of(2983, 11, 11));
         user.setEmail("ivanov_i@yandex.ru");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Marker.OnCreate.class);

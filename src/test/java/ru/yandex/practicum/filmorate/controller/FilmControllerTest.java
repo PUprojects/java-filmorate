@@ -22,7 +22,7 @@ public class FilmControllerTest {
     @BeforeEach
     void initialize() {
         filmController = new FilmController();
-        try(ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             validator = factory.getValidator();
         }
     }
@@ -35,7 +35,7 @@ public class FilmControllerTest {
         film.setName("Титаник");
         film.setDescription("Про корабль и айсберг");
         film.setDuration(180);
-        film.setReleaseDate(LocalDate.of(1997,1,1));
+        film.setReleaseDate(LocalDate.of(1997, 1, 1));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Marker.OnCreate.class);
         assertTrue(violations.isEmpty(), "Не создан фильм с корректно заданными параметрами");
@@ -45,7 +45,7 @@ public class FilmControllerTest {
         violations = validator.validate(film, Marker.OnUpdate.class);
         assertTrue(violations.isEmpty(), "Не обновлён фильм с корректно заданными параметрами");
 
-        assertDoesNotThrow(()->{
+        assertDoesNotThrow(() -> {
             filmController.create(film);
         }, "Не создан фильм с корректно заданными параметрами");
     }
@@ -58,14 +58,14 @@ public class FilmControllerTest {
         film1.setName("Титаник");
         film1.setDescription("Про корабль и айсберг");
         film1.setDuration(180);
-        film1.setReleaseDate(LocalDate.of(1997,1,1));
+        film1.setReleaseDate(LocalDate.of(1997, 1, 1));
 
         Film film2 = new Film();
 
         film2.setName("Властелин колец");
         film2.setDescription("Про хоббитов и путешествия");
         film2.setDuration(558);
-        film2.setReleaseDate(LocalDate.of(2001,1,1));
+        film2.setReleaseDate(LocalDate.of(2001, 1, 1));
 
         Film createdFilm1 = filmController.create(film1);
         Film createdFilm2 = filmController.create(film2);
@@ -85,7 +85,7 @@ public class FilmControllerTest {
         film.setName("Титаник");
         film.setDescription("Про корабль и айсберг");
         film.setDuration(180);
-        film.setReleaseDate(LocalDate.of(1997,1,1));
+        film.setReleaseDate(LocalDate.of(1997, 1, 1));
 
         film = filmController.create(film);
 
@@ -93,7 +93,7 @@ public class FilmControllerTest {
         film.setDuration(270);
 
         Film finalFilm = film;
-        assertDoesNotThrow(()->{
+        assertDoesNotThrow(() -> {
             filmController.update(finalFilm);
         }, "Не обновлён фильм с корректно заданными параметрами");
     }
@@ -107,10 +107,10 @@ public class FilmControllerTest {
         film.setName("Титаник");
         film.setDescription("Про корабль и айсберг");
         film.setDuration(180);
-        film.setReleaseDate(LocalDate.of(1997,1,1));
+        film.setReleaseDate(LocalDate.of(1997, 1, 1));
 
         assertThrows(NotFoundException.class,
-                ()-> filmController.update(film),
+                () -> filmController.update(film),
                 "Был обновлён фильм с несуществующим id");
     }
 
@@ -122,7 +122,7 @@ public class FilmControllerTest {
         film.setName("");
         film.setDescription("Про корабль и айсберг");
         film.setDuration(180);
-        film.setReleaseDate(LocalDate.of(1997,1,1));
+        film.setReleaseDate(LocalDate.of(1997, 1, 1));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Marker.OnCreate.class);
         assertFalse(violations.isEmpty(), "Должна быть сформирована ошибка валидации при создании");
@@ -155,7 +155,7 @@ public class FilmControllerTest {
                 «Семья-то большая, да два человека
                 Всего мужиков-то: отец мой да я…»""");
         film.setDuration(180);
-        film.setReleaseDate(LocalDate.of(1900,1,1));
+        film.setReleaseDate(LocalDate.of(1900, 1, 1));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Marker.OnCreate.class);
         assertFalse(violations.isEmpty(), "Должна быть сформирована ошибка валидации при создании");
@@ -173,7 +173,7 @@ public class FilmControllerTest {
         film.setName("Бородино");
         film.setDescription("Скажи-ка, дядя");
         film.setDuration(180);
-        film.setReleaseDate(LocalDate.of(1812,1,1));
+        film.setReleaseDate(LocalDate.of(1812, 1, 1));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Marker.OnCreate.class);
         assertFalse(violations.isEmpty(), "Должна быть сформирована ошибка валидации при создании");
@@ -191,7 +191,7 @@ public class FilmControllerTest {
         film.setName("Титаник");
         film.setDescription("Про корабль и айсберг");
         film.setDuration(0);
-        film.setReleaseDate(LocalDate.of(1997,1,1));
+        film.setReleaseDate(LocalDate.of(1997, 1, 1));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Marker.OnCreate.class);
         assertFalse(violations.isEmpty(), "Должна быть сформирована ошибка валидации при создании");
@@ -207,6 +207,3 @@ public class FilmControllerTest {
         assertFalse(violations.isEmpty(), "Должна быть сформирована ошибка валидации при обновлении");
     }
 }
-
-
-

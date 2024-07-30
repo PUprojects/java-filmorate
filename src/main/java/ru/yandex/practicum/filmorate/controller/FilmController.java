@@ -47,7 +47,7 @@ public class FilmController {
     public Film update(@RequestBody @Valid Film film) {
         log.info("Update film {} start", film);
         Film savedFilm = films.get(film.getId());
-        if(savedFilm == null) {
+        if (savedFilm == null) {
             throw new NotFoundException("Фильм с id = " + film.getId() + " не найден");
         }
         films.put(film.getId(), film);
