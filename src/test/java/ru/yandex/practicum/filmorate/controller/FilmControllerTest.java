@@ -70,7 +70,7 @@ public class FilmControllerTest {
         Film createdFilm1 = filmController.create(film1);
         Film createdFilm2 = filmController.create(film2);
 
-        List<Film> allFilms = filmController.getAllFilms();
+        List<Film> allFilms = filmController.getAll();
 
         assertEquals(2, allFilms.size(), "Количество созданных фильмов должно бытьравно 2");
         assertEquals(createdFilm1, allFilms.get(0), "Первый фильм не совпадат с возвращённым");

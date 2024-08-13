@@ -26,4 +26,5 @@ public class Film {
     @Positive(groups = {Marker.OnCreate.class, Marker.OnUpdate.class},
             message = "Продолжительность должна быть целым числом")
     int duration;
+    int likesCount;
 }

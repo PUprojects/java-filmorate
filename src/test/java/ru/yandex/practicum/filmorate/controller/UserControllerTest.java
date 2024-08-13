@@ -73,7 +73,7 @@ public class UserControllerTest {
         User createdUser1 = userController.create(user1);
         User createdUser2 = userController.create(user2);
 
-        List<User> allUsers = userController.getAllUsers();
+        List<User> allUsers = userController.getAll();
 
         assertEquals(2, allUsers.size(), "Количество созданных пользователей должно бытьравно 2");
         assertEquals(createdUser1, allUsers.get(0), "Первый пользователь не совпадат с возвращённым");
