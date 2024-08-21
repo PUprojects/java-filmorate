@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Marker;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +26,10 @@ public class FilmControllerTest {
 
     @BeforeEach
     void initialize() {
-        filmController = new FilmController();
+        UserStorage userStorage = new InMemoryUserStorage();
+        FilmStorage filmStorage = new InMemoryFilmStorage();
+        FilmService filmService = new FilmService(filmStorage, userStorage);
+        filmController = new FilmController(filmService);
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             validator = factory.getValidator();
         }
@@ -70,7 +78,7 @@ public class FilmControllerTest {
         Film createdFilm1 = filmController.create(film1);
         Film createdFilm2 = filmController.create(film2);
 
-        List<Film> allFilms = filmController.getAllFilms();
+        List<Film> allFilms = filmController.getAll();
 
         assertEquals(2, allFilms.size(), "Количество созданных фильмов должно бытьравно 2");
         assertEquals(createdFilm1, allFilms.get(0), "Первый фильм не совпадат с возвращённым");

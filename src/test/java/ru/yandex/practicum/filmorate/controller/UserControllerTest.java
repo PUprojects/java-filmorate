@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Marker;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,7 +27,9 @@ public class UserControllerTest {
 
     @BeforeEach
     void initialize() {
-        userController = new UserController();
+        UserStorage userStorage = new InMemoryUserStorage();
+        UserService userService = new UserService(userStorage);
+        userController = new UserController(userService);
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             validator = factory.getValidator();
         }
@@ -73,7 +78,7 @@ public class UserControllerTest {
         User createdUser1 = userController.create(user1);
         User createdUser2 = userController.create(user2);
 
-        List<User> allUsers = userController.getAllUsers();
+        List<User> allUsers = userController.getAll();
 
         assertEquals(2, allUsers.size(), "Количество созданных пользователей должно бытьравно 2");
         assertEquals(createdUser1, allUsers.get(0), "Первый пользователь не совпадат с возвращённым");
