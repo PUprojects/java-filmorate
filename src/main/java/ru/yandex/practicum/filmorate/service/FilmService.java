@@ -2,58 +2,91 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.BadRequestException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.repository.JdbcFilmRepository;
+import ru.yandex.practicum.filmorate.repository.JdbcGenreRepository;
+import ru.yandex.practicum.filmorate.repository.JdbcMpaRepository;
+import ru.yandex.practicum.filmorate.repository.JdbcUserRepository;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FilmService {
-    private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
+    private final JdbcFilmRepository filmRepository;
+    private final JdbcUserRepository userRepository;
+    private final JdbcGenreRepository genreRepository;
+    private final JdbcMpaRepository mpaRepository;
 
     public List<Film> getAll() {
-        return filmStorage.getAll();
+        return filmRepository.getAll();
     }
 
     public Film get(long filmId) {
-        return filmStorage.get(filmId)
+        return filmRepository.getById(filmId)
                 .orElseThrow(() -> new NotFoundException("Not found fim with id = " + filmId));
     }
 
     public Film create(Film film) {
         film.setLikesCount(0);
-        return filmStorage.create(film);
+        Mpa mpa = mpaRepository.getById(film.getMpa().getId())
+                .orElseThrow(() -> new BadRequestException("Not found MPA rating with id " + film.getMpa().getId()));
+        film.setMpa(mpa);
+        if (film.getGenres() != null) {
+            List<Genre> genres = genreRepository.getByIds(film.getGenres().stream().map(Genre::getId).toList());
+            if (genres.size() != film.getGenres().size()) {
+                genres.forEach(film.getGenres()::remove);
+                throw new BadRequestException("Some genres not found: " +
+                        film.getGenres().stream().map(Genre::getId).toList());
+            }
+            film.setGenres(new LinkedHashSet<>(genres));
+        }
+
+        return filmRepository.create(film);
     }
 
     public Film update(Film film) {
         Film savedFilm = get(film.getId());
         film.setLikesCount(savedFilm.getLikesCount());
-        filmStorage.update(film);
-
+        Mpa mpa = mpaRepository.getById(film.getMpa().getId())
+                .orElseThrow(() -> new NotFoundException("Not found MPA rating with id " + film.getMpa().getId()));
+        if (film.getGenres() == null) {
+            film.setGenres(savedFilm.getGenres());
+        } else {
+            List<Genre> genres = genreRepository.getByIds(film.getGenres().stream().map(Genre::getId).toList());
+            if (genres.size() != film.getGenres().size()) {
+                genres.forEach(film.getGenres()::remove);
+                throw new NotFoundException("Some genres not found: " +
+                        film.getGenres().stream().map(Genre::getId).toList());
+            }
+        }
+        filmRepository.update(film);
         return film;
     }
 
     public void addLike(long filmId, long userId) {
         Film film = get(filmId);
-        userStorage.get(userId)
+        userRepository.getById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found with id = " + userId));
-
-        film.setLikesCount(filmStorage.addLike(filmId, userId));
+        filmRepository.addLike(filmId, userId);
+        film.setLikesCount(film.getLikesCount() + 1);
     }
 
     public void deleteLike(long filmId, long userId) {
         Film film = get(filmId);
-        userStorage.get(userId)
+        userRepository.getById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found with id = " + userId));
 
-        film.setLikesCount(filmStorage.deleteLike(filmId, userId));
+        filmRepository.deleteLike(filmId, userId);
+        film.setLikesCount(film.getLikesCount() - 1);
     }
 
     public List<Film> getPopular(int count) {
-        return filmStorage.getPopular(count);
+        return filmRepository.getPopular(count);
     }
 }

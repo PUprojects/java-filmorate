@@ -4,14 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.repository.JdbcUserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserStorage userStorage;
+    private final JdbcUserRepository userRepository;
 
     private void setNameSameAsLogin(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
@@ -20,51 +21,53 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return userStorage.getAll();
+        return userRepository.getAll();
     }
 
     public User get(long userId) {
-        return userStorage.get(userId)
+        return userRepository.getById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found with id = " + userId));
     }
 
     public User create(User user) {
         setNameSameAsLogin(user);
 
-        return userStorage.create(user);
+        return userRepository.create(user);
     }
 
     public User update(User user) {
         get(user.getId());
         setNameSameAsLogin(user);
-        userStorage.update(user);
+        userRepository.update(user);
 
         return user;
     }
 
-    public void addFriend(long userId, long friendId) {
-        get(userId);
-        get(friendId);
+    private void isUsersInTable(List<Long> usersIds) {
+        List<User> foundUsers = userRepository.getByIds(usersIds);
+        if (foundUsers.size() != usersIds.size()) {
+            usersIds.removeAll(foundUsers.stream().map(User::getId).toList());
+            throw new NotFoundException("User(s) not found with id(s) = " + usersIds.toString());
+        }
+    }
 
-        userStorage.addFiend(userId, friendId);
+    public void addFriend(long userId, long friendId) {
+        isUsersInTable(new ArrayList<>(List.of(userId, friendId)));
+        userRepository.addFiend(userId, friendId);
     }
 
     public void deleteFriend(long userId, long friendId) {
-        get(userId);
-        get(friendId);
-
-        userStorage.deleteFriend(userId, friendId);
+        isUsersInTable(new ArrayList<>(List.of(userId, friendId)));
+        userRepository.deleteFriend(userId, friendId);
     }
 
     public List<User> getFriends(long userId) {
         get(userId);
-        return userStorage.getFriends(userId);
+        return userRepository.getFriends(userId);
     }
 
     public List<User> getCommonFriends(long userId, long otherId) {
-        get(userId);
-        get(otherId);
-
-        return userStorage.getCommonFriends(userId, otherId);
+        isUsersInTable(new ArrayList<>(List.of(userId, otherId)));
+        return userRepository.getCommonFriends(userId, otherId);
     }
 }
