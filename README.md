@@ -31,13 +31,12 @@ INTERSECT
   WHERE user_id = 42 AND status_id = 1)
 )
 ``` 
-- получаем список всех фильмов с их жанрами и рейтингами MBA
+- получаем список всех фильмов с рейтингами MBA
 ```SQL
-SELECT f.name, f.description, f.release_date, f.duration, mba.mba_name, g.genre_name 
+SELECT f.name, f.description, f.release_date, f.duration, mba.mba_name 
 FROM films f
 JOIN mba ON f.mba_id = mba.mba_id
-JOIN film_genres fg ON fg.film_id = f.film_id 
-JOIN genres g ON g.genre_id = fg.genre_id
+JOIN film_genres fg ON fg.film_id = f.film_id
 ```
 - получаем список названий 10 лучших фильмов
 ```SQL
