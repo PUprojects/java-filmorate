@@ -37,7 +37,7 @@ class JdbcFilmRepositoryTest {
         film.setId(TEST_FILM_ID);
         film.setName("Джентльмены");
         film.setDescription("Гангстеры всех мастей делят наркоферму. Закрученная экшен-комедия Гая Ричи с Мэттью Макконахи и Хью Грантом");
-        film.setReleaseDate(LocalDate.of(2019, 5,5));
+        film.setReleaseDate(LocalDate.of(2019, 5, 5));
         film.setDuration(120);
 
         film.setMpa(new Mpa());
@@ -61,7 +61,7 @@ class JdbcFilmRepositoryTest {
         film.setId(TEST_FILM_ID);
         film.setName("Остров проклятых");
         film.setDescription("Два американских судебных пристава отправляются на один из островов в штате Массачусетс");
-        film.setReleaseDate(LocalDate.of(2010, 2,13));
+        film.setReleaseDate(LocalDate.of(2010, 2, 13));
         film.setDuration(138);
 
         film.setMpa(new Mpa());
@@ -96,7 +96,7 @@ class JdbcFilmRepositoryTest {
         film.setId(2);
         film.setName("Один дома");
         film.setDescription("Американское семейство отправляется из Чикаго в Европу, но в спешке сборов бестолковые родители забывают дома... одного из своих детей.");
-        film.setReleaseDate(LocalDate.of(1990, 12,12));
+        film.setReleaseDate(LocalDate.of(1990, 12, 12));
         film.setDuration(103);
         film.setMpa(new Mpa());
         film.getMpa().setId(2);
@@ -110,7 +110,7 @@ class JdbcFilmRepositoryTest {
         film.setId(3);
         film.setName("Шрэк");
         film.setDescription("Жил да был в сказочном государстве большой зеленый великан по имени Шрэк.");
-        film.setReleaseDate(LocalDate.of(2001, 4,1));
+        film.setReleaseDate(LocalDate.of(2001, 4, 1));
         film.setDuration(107);
         film.setMpa(new Mpa());
         film.getMpa().setId(2);
@@ -132,7 +132,7 @@ class JdbcFilmRepositoryTest {
 
         assertThat(filmsFromDB).hasSize(filmsTest.size());
 
-        for(int i = 0; i < filmsFromDB.size(); ++i) {
+        for (int i = 0; i < filmsFromDB.size(); ++i) {
             assertThat(filmsFromDB.get(i))
                     .usingRecursiveComparison()
                     .isEqualTo(filmsTest.get(i));
@@ -176,7 +176,7 @@ class JdbcFilmRepositoryTest {
     @DisplayName("Репозиторий должен обновлять запиь о фильме")
     void shouldUpdateFilmRecord() {
         Film filmBeforeUpdate = jdbcFilmRepository.getById(TEST_FILM_ID)
-                .orElseThrow(()-> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
+                .orElseThrow(() -> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
 
         assertThat(filmBeforeUpdate)
                 .usingRecursiveComparison()
@@ -185,7 +185,7 @@ class JdbcFilmRepositoryTest {
         jdbcFilmRepository.update(getTestFilmToCreateOrUpdate());
 
         Film userAfterUpdate = jdbcFilmRepository.getById(TEST_FILM_ID)
-                .orElseThrow(()-> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
+                .orElseThrow(() -> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
 
         assertThat(userAfterUpdate)
                 .usingRecursiveComparison()
@@ -196,14 +196,14 @@ class JdbcFilmRepositoryTest {
     @DisplayName("Репозиторий должен добавлять записи о лайках")
     void shouldAddLikeRecord() {
         Film film = jdbcFilmRepository.getById(TEST_FILM_ID)
-                .orElseThrow(()-> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
+                .orElseThrow(() -> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
 
         assertThat(film.getLikesCount()).isEqualTo(1);
 
         jdbcFilmRepository.addLike(TEST_FILM_ID, 2);
 
         film = jdbcFilmRepository.getById(TEST_FILM_ID)
-                .orElseThrow(()-> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
+                .orElseThrow(() -> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
 
         assertThat(film.getLikesCount()).isEqualTo(2);
     }
@@ -212,14 +212,14 @@ class JdbcFilmRepositoryTest {
     @DisplayName("Репозиторий должен удалять записи о лайках")
     void shouldDeleteLikeRecord() {
         Film film = jdbcFilmRepository.getById(2)
-                .orElseThrow(()-> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
+                .orElseThrow(() -> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
 
         assertThat(film.getLikesCount()).isEqualTo(3);
 
         jdbcFilmRepository.deleteLike(2, 1);
 
         film = jdbcFilmRepository.getById(2)
-                .orElseThrow(()-> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
+                .orElseThrow(() -> new NotFoundException("Film not found with id = " + TEST_FILM_ID));
 
         assertThat(film.getLikesCount()).isEqualTo(2);
     }

@@ -61,7 +61,7 @@ class JdbcGenreRepositoryTest {
 
         assertThat(genresFromDB).hasSize(genresTest.size());
 
-        for(int i = 0; i < genresFromDB.size(); ++i) {
+        for (int i = 0; i < genresFromDB.size(); ++i) {
             assertThat(genresFromDB.get(i))
                     .usingRecursiveComparison()
                     .isEqualTo(genresTest.get(i));

@@ -49,7 +49,7 @@ class JdbcMpaRepositoryTest {
         mpa3.setName("PG-13");
         mpaAll.add(mpa3);
 
-        return  mpaAll;
+        return mpaAll;
     }
 
     @Test
@@ -72,7 +72,7 @@ class JdbcMpaRepositoryTest {
 
         assertThat(mpaList).hasSize(testMpaList.size());
 
-        for(int i = 0; i < mpaList.size(); ++i) {
+        for (int i = 0; i < mpaList.size(); ++i) {
             assertThat(mpaList.get(i))
                     .usingRecursiveComparison()
                     .isEqualTo(testMpaList.get(i));

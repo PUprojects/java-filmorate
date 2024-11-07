@@ -96,7 +96,7 @@ class JdbcUserRepositoryTest {
 
         assertThat(usersFromDB).hasSize(usersTest.size());
 
-        for(int i = 0; i < usersFromDB.size(); ++i) {
+        for (int i = 0; i < usersFromDB.size(); ++i) {
             assertThat(usersFromDB.get(i))
                     .usingRecursiveComparison()
                     .isEqualTo(usersTest.get(i));
@@ -155,7 +155,7 @@ class JdbcUserRepositoryTest {
     @DisplayName("Репозиторий должен обновлять запиь о пользователе")
     void shouldUpdateUserRecord() {
         User userBeforeUpdate = userRepository.getById(TEST_USER_ID)
-                .orElseThrow(()-> new NotFoundException("User not found with id = " + TEST_USER_ID));
+                .orElseThrow(() -> new NotFoundException("User not found with id = " + TEST_USER_ID));
 
         assertThat(userBeforeUpdate)
                 .usingRecursiveComparison()
@@ -164,7 +164,7 @@ class JdbcUserRepositoryTest {
         userRepository.update(getTestUserToUpdate());
 
         User userAfterUpdate = userRepository.getById(TEST_USER_ID)
-                .orElseThrow(()-> new NotFoundException("User not found with id = " + TEST_USER_ID));
+                .orElseThrow(() -> new NotFoundException("User not found with id = " + TEST_USER_ID));
 
         assertThat(userAfterUpdate)
                 .usingRecursiveComparison()
