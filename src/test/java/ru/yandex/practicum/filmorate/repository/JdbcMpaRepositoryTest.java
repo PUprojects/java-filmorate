@@ -26,7 +26,7 @@ class JdbcMpaRepositoryTest {
     public static final long TEST_MPA_ID = 1;
     private final JdbcMpaRepository mpaRepository;
 
-    static Mpa getTestMpa() {
+    private static Mpa getTestMpa() {
         Mpa mpa = new Mpa();
         mpa.setId(TEST_MPA_ID);
         mpa.setName("G");
@@ -34,7 +34,7 @@ class JdbcMpaRepositoryTest {
         return mpa;
     }
 
-    static List<Mpa> getTestMpaAll() {
+    private static List<Mpa> getTestMpaAll() {
         ArrayList<Mpa> mpaAll = new ArrayList<>(3);
 
         mpaAll.add(getTestMpa());

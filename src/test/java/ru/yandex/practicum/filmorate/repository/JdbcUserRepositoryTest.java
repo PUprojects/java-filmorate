@@ -28,7 +28,7 @@ class JdbcUserRepositoryTest {
     public static final long TEST_USER_ID = 1;
     private final JdbcUserRepository userRepository;
 
-    static private User getTestUser() {
+    private static User getTestUser() {
         User user = new User();
 
         user.setId(TEST_USER_ID);
@@ -40,7 +40,7 @@ class JdbcUserRepositoryTest {
         return user;
     }
 
-    static private User getTestUserToUpdate() {
+    private static User getTestUserToUpdate() {
         User user = new User();
 
         user.setId(TEST_USER_ID);

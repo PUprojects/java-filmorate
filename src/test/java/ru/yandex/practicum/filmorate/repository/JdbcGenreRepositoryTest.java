@@ -26,7 +26,7 @@ class JdbcGenreRepositoryTest {
     public static final long TEST_GENRE_ID = 1;
     private final JdbcGenreRepository genreRepository;
 
-    static private Genre getTestGenre() {
+    private static Genre getTestGenre() {
         Genre genre = new Genre();
 
         genre.setId(TEST_GENRE_ID);
@@ -35,7 +35,7 @@ class JdbcGenreRepositoryTest {
         return genre;
     }
 
-    static private List<Genre> getAllTestGenres() {
+    private static List<Genre> getAllTestGenres() {
         ArrayList<Genre> genres = new ArrayList<>(3);
 
         genres.add(getTestGenre());
