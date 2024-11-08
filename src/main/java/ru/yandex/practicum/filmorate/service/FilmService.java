@@ -38,11 +38,15 @@ public class FilmService {
                 .orElseThrow(() -> new BadRequestException("Not found MPA rating with id " + film.getMpa().getId()));
         film.setMpa(mpa);
         if (film.getGenres() != null) {
-            List<Genre> genres = genreRepository.getByIds(film.getGenres().stream().map(Genre::getId).toList());
+            List<Genre> genres = genreRepository.getByIds(film.getGenres().stream()
+                    .map(Genre::getId)
+                    .toList());
             if (genres.size() != film.getGenres().size()) {
                 genres.forEach(film.getGenres()::remove);
                 throw new BadRequestException("Some genres not found: " +
-                        film.getGenres().stream().map(Genre::getId).toList());
+                        film.getGenres().stream()
+                                .map(Genre::getId)
+                                .toList());
             }
             film.setGenres(new LinkedHashSet<>(genres));
         }
@@ -53,16 +57,20 @@ public class FilmService {
     public Film update(Film film) {
         Film savedFilm = get(film.getId());
         film.setLikesCount(savedFilm.getLikesCount());
-        Mpa mpa = mpaRepository.getById(film.getMpa().getId())
+        mpaRepository.getById(film.getMpa().getId())
                 .orElseThrow(() -> new NotFoundException("Not found MPA rating with id " + film.getMpa().getId()));
         if (film.getGenres() == null) {
             film.setGenres(savedFilm.getGenres());
         } else {
-            List<Genre> genres = genreRepository.getByIds(film.getGenres().stream().map(Genre::getId).toList());
+            List<Genre> genres = genreRepository.getByIds(film.getGenres().stream()
+                    .map(Genre::getId)
+                    .toList());
             if (genres.size() != film.getGenres().size()) {
                 genres.forEach(film.getGenres()::remove);
                 throw new NotFoundException("Some genres not found: " +
-                        film.getGenres().stream().map(Genre::getId).toList());
+                        film.getGenres().stream()
+                                .map(Genre::getId)
+                                .toList());
             }
         }
         filmRepository.update(film);

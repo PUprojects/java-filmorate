@@ -46,8 +46,10 @@ public class UserService {
     private void isUsersInTable(List<Long> usersIds) {
         List<User> foundUsers = userRepository.getByIds(usersIds);
         if (foundUsers.size() != usersIds.size()) {
-            usersIds.removeAll(foundUsers.stream().map(User::getId).toList());
-            throw new NotFoundException("User(s) not found with id(s) = " + usersIds.toString());
+            usersIds.removeAll(foundUsers.stream()
+                    .map(User::getId)
+                    .toList());
+            throw new NotFoundException("User(s) not found with id(s) = " + usersIds);
         }
     }
 

@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.repository.mappers.FilmRowMapper;
 import ru.yandex.practicum.filmorate.repository.mappers.GenreRowMapper;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -88,7 +89,7 @@ public class JdbcFilmRepository extends BaseRepository<Film> implements FilmRepo
         source.addValue("mpa", film.getMpa().getId());
 
         film.setId(insert(INSERT_QUERY, source));
-        if (film.getGenres() != null)
+        if(CollectionUtils.isNotEmpty(film.getGenres()))
             setFilmGenres(film);
 
         return film;
