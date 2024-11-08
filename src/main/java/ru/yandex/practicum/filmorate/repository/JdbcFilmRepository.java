@@ -89,7 +89,7 @@ public class JdbcFilmRepository extends BaseRepository<Film> implements FilmRepo
         source.addValue("mpa", film.getMpa().getId());
 
         film.setId(insert(INSERT_QUERY, source));
-        if(CollectionUtils.isNotEmpty(film.getGenres()))
+        if (CollectionUtils.isNotEmpty(film.getGenres()))
             setFilmGenres(film);
 
         return film;
