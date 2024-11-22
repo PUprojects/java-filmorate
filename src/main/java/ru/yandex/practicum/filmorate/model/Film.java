@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
@@ -27,4 +28,6 @@ public class Film {
             message = "Продолжительность должна быть целым числом")
     int duration;
     int likesCount;
+    Mpa mpa;
+    LinkedHashSet<Genre> genres;
 }
